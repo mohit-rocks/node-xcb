@@ -1,4 +1,4 @@
-FROM node:24-slim
+FROM node:16-slim
 
 RUN apt-get update -y \
     && apt-get install -yq \
