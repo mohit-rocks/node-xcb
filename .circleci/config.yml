@@ -14,20 +14,20 @@ workflows:
 jobs:
   build:
     docker:
-      - image: cimg/base:2021.04
+      - image: cimg/base:current
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.11
-          docker_layer_caching: true
+          version: default
       - run:
           command: |
-            TAG_NODE_MAJOR=node-18
+            IMAGE=$DOCKER_USER/node-xcb
+            TAG_NODE_MAJOR=node-24
             TAG_VERSION=node-$CIRCLE_TAG
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-            docker build -t regviz/node-xcb .
-            docker tag regviz/node-xcb regviz/node-xcb:$TAG_VERSION
-            docker tag regviz/node-xcb regviz/node-xcb:$TAG_NODE_MAJOR
-            docker push regviz/node-xcb:$TAG_VERSION
-            docker push regviz/node-xcb:$TAG_NODE_MAJOR
-            docker push regviz/node-xcb:latest
+            docker build -t $IMAGE .
+            docker tag $IMAGE $IMAGE:$TAG_VERSION
+            docker tag $IMAGE $IMAGE:$TAG_NODE_MAJOR
+            docker push $IMAGE:$TAG_VERSION
+            docker push $IMAGE:$TAG_NODE_MAJOR
+            docker push $IMAGE:latest
